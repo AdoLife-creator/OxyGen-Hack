@@ -1,5 +1,6 @@
 package com.oxygenclient.module.combat;
 
+import com.oxygenclient.bypass.AntiCheatBypass;
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
 import net.minecraft.entity.Entity;
@@ -10,9 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SilentAim extends Module {
-    public SilentAim() {
-        super("SilentAim", "Aim without moving screen", Category.COMBAT);
-    }
+    public SilentAim() { super("SilentAim", Category.COMBAT); }
 
     @Override
     public void onTick() {
@@ -25,7 +24,6 @@ public class SilentAim extends Module {
 
         List<Entity> targets = mc.world.getOtherEntities(mc.player, box,
             e -> e instanceof PlayerEntity && e.isAlive());
-
         if (targets.isEmpty()) return;
 
         Entity t = targets.stream()
@@ -38,8 +36,11 @@ public class SilentAim extends Module {
             double dz = t.getZ() - mc.player.getZ();
             double dist = Math.sqrt(dx * dx + dz * dz);
             
-            mc.player.setYaw((float)(MathHelper.atan2(dz, dx) * 180.0 / Math.PI) - 90f);
-            mc.player.setPitch((float)(-MathHelper.atan2(dy, dist) * 180.0 / Math.PI));
+            float yaw = (float)(MathHelper.atan2(dz, dx) * 180.0 / Math.PI) - 90f;
+            float pitch = (float)(-MathHelper.atan2(dy, dist) * 180.0 / Math.PI);
+            
+            mc.player.setYaw(yaw + AntiCheatBypass.getRandomYawOffset());
+            mc.player.setPitch(pitch + AntiCheatBypass.getRandomPitchOffset());
         }
     }
 }
