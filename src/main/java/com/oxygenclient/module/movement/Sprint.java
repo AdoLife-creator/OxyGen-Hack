@@ -5,7 +5,7 @@ import com.oxygenclient.module.Module;
 
 public class Sprint extends Module {
     public Sprint() {
-        super("Sprint", "Auto sprint", Category.MOVEMENT);
+        super("Sprint", Category.MOVEMENT);
     }
 
     @Override
