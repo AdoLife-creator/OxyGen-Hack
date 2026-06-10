@@ -4,20 +4,20 @@ import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
 
 public class Fullbright extends Module {
-    private double oldGamma;
+    private double old;
 
     public Fullbright() {
-        super("Fullbright", "Full brightness", Category.RENDER);
+        super("Fullbright", Category.RENDER);
     }
 
     @Override
     public void onEnable() {
-        oldGamma = mc.options.getGamma().getValue();
+        old = mc.options.getGamma().getValue();
         mc.options.getGamma().setValue(16.0);
     }
 
     @Override
     public void onDisable() {
-        mc.options.getGamma().setValue(oldGamma);
+        mc.options.getGamma().setValue(old);
     }
 }
