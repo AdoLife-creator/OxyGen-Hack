@@ -2,20 +2,15 @@
   "required": true,
   "package": "com.oxygenclient.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "EntityMixin",
-    "PlayerEntityMixin",
-    "LivingEntityMixin"
-  ],
+  "mixins": [],
   "client": [
     "NetworkHandlerMixin",
     "GameRendererMixin",
+    "EntityMixin",
     "MinecraftClientMixin",
-    "BlockMixin",
-    "WorldRendererMixin"
+    "BlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "refmap": "oxygen-client-refmap.json"
+  }
 }
