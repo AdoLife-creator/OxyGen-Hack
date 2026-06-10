@@ -1,9 +1,9 @@
 package com.oxygenclient.bypass;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class DelayNormalizer {
-    private static final Random random = new Random();
+    private static final SecureRandom random = new SecureRandom();
     private static long lastAttack = 0;
     private static long lastPacket = 0;
     private static int hits = 0;

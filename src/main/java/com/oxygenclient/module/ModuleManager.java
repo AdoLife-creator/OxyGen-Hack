@@ -33,7 +33,7 @@ public class ModuleManager {
     }
 
     private void add(Module m) { modules.add(m); }
-    public List<Module> getModules() { return modules; }
+    public List<Module> getModules() { return Collections.unmodifiableList(modules); }
     public List<Module> getByCategory(Category c) {
         return modules.stream().filter(m -> m.getCategory() == c).collect(Collectors.toList());
     }

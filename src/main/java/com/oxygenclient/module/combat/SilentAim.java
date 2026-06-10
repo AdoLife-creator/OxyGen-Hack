@@ -15,7 +15,7 @@ public class SilentAim extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player == null || !mc.options.attackKey.isPressed()) return;
+        if (mc.player == null || mc.world == null || !mc.options.attackKey.isPressed()) return;
         Box box = new Box(mc.player.getX()-6, mc.player.getY()-6, mc.player.getZ()-6, mc.player.getX()+6, mc.player.getY()+6, mc.player.getZ()+6);
         List<Entity> targets = mc.world.getOtherEntities(mc.player, box, e -> e instanceof PlayerEntity && e.isAlive());
         if (targets.isEmpty()) return;

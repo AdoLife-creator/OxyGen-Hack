@@ -1,9 +1,9 @@
 package com.oxygenclient.bypass;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class AntiCheatBypass {
-    private static final Random random = new Random();
+    private static final SecureRandom random = new SecureRandom();
 
     public static double getHumanizedReach() {
         return 3.0 + random.nextDouble() * 0.2;
