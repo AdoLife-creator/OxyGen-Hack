@@ -5,7 +5,7 @@ import com.oxygenclient.module.Module;
 
 public class Fly extends Module {
     public Fly() {
-        super("Fly", "Enable flying", Category.MOVEMENT);
+        super("Fly", Category.MOVEMENT);
     }
 
     @Override
