@@ -2,6 +2,7 @@ package com.oxygenclient.module.combat;
 
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
+import com.oxygenclient.util.PlayerHelper;
 import net.minecraft.util.Hand;
 
 public class AutoClicker extends Module {
@@ -10,7 +11,7 @@ public class AutoClicker extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player == null || mc.currentScreen != null) return;
+        if (!PlayerHelper.playerPresent() || mc.currentScreen != null) return;
         tick++;
         if (tick >= 2 && mc.options.attackKey.isPressed()) {
             mc.interactionManager.attackEntity(mc.player, mc.player);

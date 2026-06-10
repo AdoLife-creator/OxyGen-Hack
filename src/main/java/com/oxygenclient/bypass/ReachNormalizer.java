@@ -1,13 +1,14 @@
 package com.oxygenclient.bypass;
 
+import com.oxygenclient.util.MinecraftRef;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 
 public class ReachNormalizer {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public static double getRealDistance(Entity target) {
+        MinecraftClient mc = MinecraftRef.mc();
         if (target == null || mc.player == null) return 99;
         Vec3d eye = mc.player.getEyePos();
         Vec3d t = target.getPos().add(0, target.getHeight() / 2, 0);

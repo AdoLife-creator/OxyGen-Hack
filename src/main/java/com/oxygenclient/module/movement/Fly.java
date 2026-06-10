@@ -2,6 +2,7 @@ package com.oxygenclient.module.movement;
 
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
+import com.oxygenclient.util.PlayerHelper;
 
 public class Fly extends Module {
     public Fly() {
@@ -10,7 +11,7 @@ public class Fly extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player != null) {
+        if (PlayerHelper.playerPresent()) {
             mc.player.getAbilities().flying = true;
             mc.player.getAbilities().allowFlying = true;
         }
@@ -18,7 +19,7 @@ public class Fly extends Module {
 
     @Override
     public void onDisable() {
-        if (mc.player != null && !mc.player.isCreative()) {
+        if (PlayerHelper.playerPresent() && !mc.player.isCreative()) {
             mc.player.getAbilities().flying = false;
             mc.player.getAbilities().allowFlying = false;
         }

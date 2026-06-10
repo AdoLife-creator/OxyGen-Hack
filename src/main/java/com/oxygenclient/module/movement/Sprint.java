@@ -2,6 +2,7 @@ package com.oxygenclient.module.movement;
 
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
+import com.oxygenclient.util.PlayerHelper;
 
 public class Sprint extends Module {
     public Sprint() {
@@ -10,7 +11,7 @@ public class Sprint extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player != null && mc.player.forwardSpeed > 0) {
+        if (PlayerHelper.playerPresent() && mc.player.forwardSpeed > 0) {
             mc.player.setSprinting(true);
         }
     }

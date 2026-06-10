@@ -1,15 +1,16 @@
 package com.oxygenclient.bypass;
 
+import com.oxygenclient.util.MinecraftRef;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
 
 public class RotationSpoofer {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
     private static float serverYaw = 0;
     private static float serverPitch = 0;
     private static boolean init = false;
 
     public static void update() {
+        MinecraftClient mc = MinecraftRef.mc();
         if (mc.player == null) return;
         if (!init) {
             serverYaw = mc.player.getYaw();

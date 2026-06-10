@@ -25,11 +25,15 @@ public class XRay extends Module {
 
     @Override
     public void onEnable() {
-        if (mc.worldRenderer != null) mc.worldRenderer.reload();
+        reloadWorldRenderer();
     }
 
     @Override
     public void onDisable() {
+        reloadWorldRenderer();
+    }
+
+    private void reloadWorldRenderer() {
         if (mc.worldRenderer != null) mc.worldRenderer.reload();
     }
 }

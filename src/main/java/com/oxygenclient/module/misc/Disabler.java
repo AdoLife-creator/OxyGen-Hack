@@ -3,6 +3,7 @@ package com.oxygenclient.module.misc;
 import com.oxygenclient.bypass.AntiCheatBypass;
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
+import com.oxygenclient.util.PlayerHelper;
 
 public class Disabler extends Module {
     private int tick = 0;
@@ -13,7 +14,7 @@ public class Disabler extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player == null) return;
+        if (!PlayerHelper.playerPresent()) return;
         tick++;
         if (tick % 8 == 0 && AntiCheatBypass.shouldSkipTransaction()) {
             mc.player.setOnGround(tick % 16 != 0);

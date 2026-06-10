@@ -3,6 +3,7 @@ package com.oxygenclient.ui;
 import com.oxygenclient.OxygenClient;
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
+import com.oxygenclient.util.BrandingConstants;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -49,7 +50,7 @@ public class ClickGUI extends Screen {
     @Override
     public void render(DrawContext ctx, int mx, int my, float d) {
         renderBackground(ctx, mx, my, d);
-        ctx.drawCenteredTextWithShadow(textRenderer, "§6OxyGen Client v" + OxygenClient.VERSION, width / 2, 10, 0xFFD700);
+        ctx.drawCenteredTextWithShadow(textRenderer, BrandingConstants.guiTitle(), width / 2, 10, BrandingConstants.BRAND_COLOR);
         super.render(ctx, mx, my, d);
     }
 
