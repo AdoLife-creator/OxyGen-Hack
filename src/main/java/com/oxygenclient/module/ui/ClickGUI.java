@@ -7,69 +7,52 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
-import java.util.*;
+import java.util.List;
 
 public class ClickGUI extends Screen {
-    private Category selectedCategory = Category.COMBAT;
+    private Category cat = Category.COMBAT;
 
     public ClickGUI() {
-        super(Text.literal("§6§l⚡ OxyGen Client GUI"));
+        super(Text.literal("OxyGen Client"));
     }
 
     @Override
     protected void init() {
         super.init();
-        int startX = 20;
-        int startY = 30;
-
-        // Kategori butonları
-        Category[] categories = Category.values();
-        for (int i = 0; i < categories.length; i++) {
-            Category cat = categories[i];
-            int x = startX + (i * 120);
-            
-            this.addDrawableChild(ButtonWidget.builder(
-                Text.literal(cat.getDisplay()),
-                button -> selectedCategory = cat
-            ).dimensions(x, startY, 110, 20).build());
+        int cx = 20, cy = 30;
+        Category[] cats = Category.values();
+        for (int i = 0; i < cats.length; i++) {
+            final Category c = cats[i];
+            addDrawableChild(ButtonWidget.builder(
+                Text.literal(c.getName()),
+                b -> cat = c
+            ).dimensions(cx + i * 100, cy, 90, 20).build());
         }
 
-        // Modül butonları
-        List<Module> modules = OxygenClient.moduleManager.getModulesByCategory(selectedCategory);
-        int y = startY + 30;
-        
-        for (Module module : modules) {
-            boolean enabled = module.isEnabled();
-            String text = (enabled ? "§a✔ " : "§c✘ ") + module.getName();
-            
-            this.addDrawableChild(ButtonWidget.builder(
-                Text.literal(text),
-                button -> module.toggle()
-            ).dimensions(startX, y, 200, 20).build());
-            
+        List<Module> mods = OxygenClient.moduleManager.getByCategory(cat);
+        int y = cy + 30;
+        for (Module m : mods) {
+            boolean on = m.isEnabled();
+            addDrawableChild(ButtonWidget.builder(
+                Text.literal((on ? "§a" : "§c") + m.getName()),
+                b -> m.toggle()
+            ).dimensions(cx, y, 150, 20).build());
             y += 22;
         }
 
-        // Kapat butonu
-        this.addDrawableChild(ButtonWidget.builder(
-            Text.literal("§cKapat"),
-            button -> this.close()
-        ).dimensions(this.width / 2 - 40, this.height - 30, 80, 20).build());
+        addDrawableChild(ButtonWidget.builder(
+            Text.literal("§cClose"),
+            b -> close()
+        ).dimensions(width / 2 - 30, height - 30, 60, 20).build());
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        
-        context.drawCenteredTextWithShadow(this.textRenderer,
-            Text.literal("§6§l⚡ OXYGEN CLIENT v" + OxygenClient.VERSION + " ⚡"),
-            this.width / 2, 10, 0xFFD700);
-
-        super.render(context, mouseX, mouseY, delta);
+    public void render(DrawContext ctx, int mx, int my, float d) {
+        renderBackground(ctx, mx, my, d);
+        ctx.drawCenteredTextWithShadow(textRenderer, "§6OxyGen Client v" + OxygenClient.VERSION, width / 2, 10, 0xFFD700);
+        super.render(ctx, mx, my, d);
     }
 
     @Override
-    public boolean shouldPause() {
-        return false;
-    }
+    public boolean shouldPause() { return false; }
 }
