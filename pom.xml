@@ -6,11 +6,11 @@
 
     <groupId>com.oxygenclient</groupId>
     <artifactId>oxygen-client</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
-    <name>OxyGen Hack Client</name>
-    <description>Ultimate Minecraft Hack Client with KillAura, XRay, ESP, Fly, Speed and more!</description>
+    <name>OxyGen Client Ghost</name>
+    <description>Undetectable Minecraft Ghost Client - GrimAC, NCP, AAC, Verus BYPASS</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,15 +58,10 @@
             <version>0.12.5+mixin.0.8.5</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>OxygenClient-${project.version}</finalName>
+        <finalName>OxygenClient-Ghost-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -86,6 +81,17 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>shade</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
@@ -94,6 +100,16 @@
                             <Mod-Side>client</Mod-Side>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:none</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
