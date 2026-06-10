@@ -11,7 +11,6 @@ public class ModuleManager {
     private final List<Module> modules = new ArrayList<>();
 
     public ModuleManager() {
-        // Combat
         add(new KillAuraGhost());
         add(new SilentAim());
         add(new AutoClicker());
@@ -19,34 +18,24 @@ public class ModuleManager {
         add(new Velocity());
         add(new HitBox());
         add(new Criticals());
-        
-        // Movement
         add(new Speed());
         add(new Fly());
         add(new NoFall());
         add(new Sprint());
         add(new Step());
         add(new Jesus());
-        
-        // Render
         add(new XRay());
         add(new ESP());
         add(new Fullbright());
         add(new Tracers());
         add(new ChestESP());
-        
-        // Misc
         add(new Disabler());
     }
 
     private void add(Module m) { modules.add(m); }
     public List<Module> getModules() { return modules; }
-    
     public List<Module> getByCategory(Category c) {
         return modules.stream().filter(m -> m.getCategory() == c).collect(Collectors.toList());
     }
-
-    public void onTick() {
-        modules.stream().filter(Module::isEnabled).forEach(Module::onTick);
-    }
+    public void onTick() { modules.stream().filter(Module::isEnabled).forEach(Module::onTick); }
 }
