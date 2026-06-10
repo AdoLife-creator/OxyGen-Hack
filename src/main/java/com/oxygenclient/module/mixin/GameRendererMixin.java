@@ -16,10 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
 public class GameRendererMixin {
-    @Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
-    private void onRender(BlockState s, BlockPos p, BlockRenderView w, MatrixStack m, VertexConsumerProvider v, boolean c, CallbackInfo ci) {
+
+    @Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true, remap = false)
+    private void onRenderBlock(BlockState state, BlockPos pos, BlockRenderView world,
+                                MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+                                CallbackInfo ci) {
         if (OxygenClient.moduleManager == null) return;
-        Module x = OxygenClient.moduleManager.getModules().stream().filter(m2 -> m2.getName().equals("XRay")).findFirst().orElse(null);
-        if (x != null && x.isEnabled() && !XRay.BLOCKS.contains(s.getBlock())) ci.cancel();
+        Module xray = OxygenClient.moduleManager.getModules().stream()
+            .filter(m -> m.getName().equals("XRay")).findFirst().orElse(null);
+        if (xray != null && xray.isEnabled() && !XRay.BLOCKS.contains(state.getBlock())) {
+            ci.cancel();
+        }
     }
 }
