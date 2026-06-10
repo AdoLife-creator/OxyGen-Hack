@@ -1,5 +1,8 @@
 package com.oxygenclient.module.combat;
 
+import com.oxygenclient.bypass.AntiCheatBypass;
+import com.oxygenclient.bypass.DelayNormalizer;
+import com.oxygenclient.bypass.ReachNormalizer;
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
 import net.minecraft.entity.Entity;
@@ -9,20 +12,17 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class KillAuraGhost extends Module {
-    private final Random random = new Random();
-    private int delay = 0;
+    private long delay = 0;
 
-    public KillAuraGhost() {
-        super("KillAura", "Auto attack entities", Category.COMBAT);
-    }
+    public KillAuraGhost() { super("KillAura", Category.COMBAT); }
 
     @Override
     public void onTick() {
         if (mc.player == null || mc.world == null) return;
-        if (delay > 0) { delay--; return; }
+        if (System.currentTimeMillis() < delay) return;
+        if (!DelayNormalizer.canSendPacket()) return;
 
         Box box = new Box(
             mc.player.getX() - 4, mc.player.getY() - 4, mc.player.getZ() - 4,
@@ -30,7 +30,9 @@ public class KillAuraGhost extends Module {
         );
 
         List<Entity> targets = mc.world.getOtherEntities(mc.player, box,
-            e -> (e instanceof HostileEntity || e instanceof PlayerEntity) && e.isAlive());
+            e -> (e instanceof HostileEntity || e instanceof PlayerEntity)
+                && e.isAlive()
+                && ReachNormalizer.isWithinReach(e));
 
         if (targets.isEmpty()) return;
 
@@ -39,13 +41,14 @@ public class KillAuraGhost extends Module {
             .orElse(null);
 
         if (target != null) {
-            mc.player.lookAt(
-                net.minecraft.entity.EntityAnchorArgumentPart.EntityAnchor.EYES,
-                target.getPos().add(0, target.getHeight() / 2, 0)
-            );
+            if (AntiCheatBypass.shouldMiss()) {
+                mc.player.swingHand(Hand.MAIN_HAND);
+                return;
+            }
+
             mc.interactionManager.attackEntity(mc.player, target);
             mc.player.swingHand(Hand.MAIN_HAND);
-            delay = 8 + random.nextInt(4);
+            delay = System.currentTimeMillis() + AntiCheatBypass.getHumanizedDelay();
         }
     }
 }
