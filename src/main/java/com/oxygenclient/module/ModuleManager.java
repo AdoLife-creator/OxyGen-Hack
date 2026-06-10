@@ -11,15 +11,16 @@ public class ModuleManager {
     private final List<Module> modules = new ArrayList<>();
 
     public ModuleManager() {
+        // Combat
         add(new KillAuraGhost());
         add(new SilentAim());
         add(new AutoClicker());
         add(new Reach());
         add(new Velocity());
         add(new HitBox());
-        add(new BackTrack());
         add(new Criticals());
         
+        // Movement
         add(new Speed());
         add(new Fly());
         add(new NoFall());
@@ -27,12 +28,14 @@ public class ModuleManager {
         add(new Step());
         add(new Jesus());
         
+        // Render
         add(new XRay());
         add(new ESP());
         add(new Fullbright());
         add(new Tracers());
         add(new ChestESP());
         
+        // Misc
         add(new Disabler());
     }
 
