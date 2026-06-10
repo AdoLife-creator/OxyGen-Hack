@@ -1,6 +1,5 @@
 package com.oxygenclient.module.combat;
 
-import com.oxygenclient.bypass.*;
 import com.oxygenclient.module.Category;
 import com.oxygenclient.module.Module;
 import net.minecraft.entity.Entity;
@@ -8,104 +7,45 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public class KillAuraGhost extends Module {
-    private double range = 3.2;
-    private int cps = 12;
-    private long lastAttack = 0;
-    private Entity currentTarget = null;
-    private int switchDelay = 0;
-    private static final Random random = new Random();
+    private final Random random = new Random();
+    private int delay = 0;
 
     public KillAuraGhost() {
-        super("KillAura", "Ghost KillAura - Tespit edilemez!", Category.COMBAT);
+        super("KillAura", "Auto attack entities", Category.COMBAT);
     }
 
     @Override
     public void onTick() {
-        if (mc.player == null || mc.world == null || mc.player.isDead()) return;
-        
-        // Delay kontrolü
-        long delay = DelayNormalizer.getAttackDelay(cps);
-        if (System.currentTimeMillis() - lastAttack < delay) return;
-        if (!DelayNormalizer.canSendPacket()) return;
+        if (mc.player == null || mc.world == null) return;
+        if (delay > 0) { delay--; return; }
 
-        Box searchBox = new Box(
-            mc.player.getX() - range, mc.player.getY() - range, mc.player.getZ() - range,
-            mc.player.getX() + range, mc.player.getY() + range, mc.player.getZ() + range
+        Box box = new Box(
+            mc.player.getX() - 4, mc.player.getY() - 4, mc.player.getZ() - 4,
+            mc.player.getX() + 4, mc.player.getY() + 4, mc.player.getZ() + 4
         );
 
-        List<Entity> targets = mc.world.getOtherEntities(mc.player, searchBox,
-            entity -> (entity instanceof HostileEntity || entity instanceof PlayerEntity)
-                && entity.isAlive()
-                && entity != mc.player
-                && ReachNormalizer.isWithinReach(entity));
+        List<Entity> targets = mc.world.getOtherEntities(mc.player, box,
+            e -> (e instanceof HostileEntity || e instanceof PlayerEntity) && e.isAlive());
 
-        if (targets.isEmpty()) {
-            currentTarget = null;
-            return;
-        }
+        if (targets.isEmpty()) return;
 
-        // Hedef değiştirme mantığı - insan gibi
-        if (switchDelay > 0) {
-            switchDelay--;
-            return;
-        }
-
-        // En yakın hedefi bul
         Entity target = targets.stream()
             .min(Comparator.comparingDouble(e -> e.distanceTo(mc.player)))
             .orElse(null);
 
-        if (target != null && target != currentTarget) {
-            currentTarget = target;
-            switchDelay = random.nextInt(3) + 2; // 2-4 tick bekle
-        }
-
-        if (currentTarget != null && currentTarget.isAlive()) {
-            attack(currentTarget);
-            lastAttack = System.currentTimeMillis();
-        }
-    }
-
-    private void attack(Entity target) {
-        // Rotasyonu hedefe çevir (server tarafında gizli)
-        double dx = target.getX() - mc.player.getX();
-        double dy = target.getEyeY() - mc.player.getEyeY();
-        double dz = target.getZ() - mc.player.getZ();
-        double dist = Math.sqrt(dx * dx + dz * dz);
-
-        float targetYaw = (float) (MathHelper.atan2(dz, dx) * 180.0 / Math.PI) - 90.0f;
-        float targetPitch = (float) (-MathHelper.atan2(dy, dist) * 180.0 / Math.PI);
-
-        // Rastgele sapma ekle
-        targetYaw += AntiCheatBypass.getRandomYawOffset();
-        targetPitch += AntiCheatBypass.getRandomPitchOffset();
-
-        // Server rotasyonunu güncelle
-        RotationSpoofer.setRotation(targetYaw, targetPitch, false);
-
-        // %3 ihtimalle ıskala
-        if (AntiCheatBypass.shouldMiss()) {
+        if (target != null) {
+            mc.player.lookAt(
+                net.minecraft.entity.EntityAnchorArgumentPart.EntityAnchor.EYES,
+                target.getPos().add(0, target.getHeight() / 2, 0)
+            );
+            mc.interactionManager.attackEntity(mc.player, target);
             mc.player.swingHand(Hand.MAIN_HAND);
-            return;
-        }
-
-        // Vuruş
-        mc.interactionManager.attackEntity(mc.player, currentTarget);
-        mc.player.swingHand(Hand.MAIN_HAND);
-
-        // Hitbox offset ekle
-        double[] offset = HitboxCorrector.getRandomHitOffset();
-        // offset kullanımı mixin ile
-
-        // Pattern reset
-        if (random.nextInt(10) == 0) {
-            DelayNormalizer.resetPattern();
+            delay = 8 + random.nextInt(4);
         }
     }
 }
