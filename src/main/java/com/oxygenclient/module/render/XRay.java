@@ -20,11 +20,16 @@ public class XRay extends Module {
     ));
 
     public XRay() {
-        super("XRay", "See ores through walls", Category.RENDER);
+        super("XRay", Category.RENDER);
     }
 
     @Override
-    public void onEnable() { if (mc.worldRenderer != null) mc.worldRenderer.reload(); }
+    public void onEnable() {
+        if (mc.worldRenderer != null) mc.worldRenderer.reload();
+    }
+
     @Override
-    public void onDisable() { if (mc.worldRenderer != null) mc.worldRenderer.reload(); }
+    public void onDisable() {
+        if (mc.worldRenderer != null) mc.worldRenderer.reload();
+    }
 }
