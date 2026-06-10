@@ -9,8 +9,13 @@ public class OxygenClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        moduleManager = new ModuleManager();
-        System.out.println("[OxyGen] v" + VERSION + " | " + moduleManager.getModules().size() + " modules loaded");
-        System.out.println("[OxyGen] Press RIGHT SHIFT to open GUI");
+        try {
+            moduleManager = new ModuleManager();
+            System.out.println("[OxyGen] v" + VERSION + " | " + moduleManager.getModules().size() + " modules loaded");
+            System.out.println("[OxyGen] Press RIGHT SHIFT to open GUI");
+        } catch (Exception e) {
+            System.err.println("[OxyGen] Failed to initialize: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

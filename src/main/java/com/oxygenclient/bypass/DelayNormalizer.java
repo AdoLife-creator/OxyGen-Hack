@@ -9,6 +9,7 @@ public class DelayNormalizer {
     private static int hits = 0;
 
     public static long getAttackDelay(int cps) {
+        if (cps <= 0) cps = 1;
         long now = System.currentTimeMillis();
         long base = 1000 / cps;
         long offset = (long)(base * (random.nextDouble() - 0.5) * 0.4);

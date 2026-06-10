@@ -12,12 +12,14 @@ public class Fullbright extends Module {
 
     @Override
     public void onEnable() {
+        if (mc.options == null || mc.options.getGamma() == null) return;
         old = mc.options.getGamma().getValue();
         mc.options.getGamma().setValue(16.0);
     }
 
     @Override
     public void onDisable() {
+        if (mc.options == null || mc.options.getGamma() == null) return;
         mc.options.getGamma().setValue(old);
     }
 }

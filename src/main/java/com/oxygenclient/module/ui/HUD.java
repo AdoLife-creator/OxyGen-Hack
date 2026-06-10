@@ -11,7 +11,7 @@ public class HUD {
     private final MinecraftClient mc = MinecraftClient.getInstance();
     
     public void render(DrawContext ctx, float d) {
-        if (mc.player == null) return;
+        if (mc.player == null || OxygenClient.moduleManager == null) return;
         List<Module> mods = OxygenClient.moduleManager.getModules().stream().filter(Module::isEnabled).toList();
         int y = 5;
         ctx.drawTextWithShadow(mc.textRenderer, Text.literal("§6OxyGen v" + OxygenClient.VERSION), 5, y, 0xFFD700);

@@ -16,7 +16,13 @@ public abstract class Module {
 
     public void toggle() {
         enabled = !enabled;
-        if (enabled) onEnable(); else onDisable();
+        try {
+            if (enabled) onEnable(); else onDisable();
+        } catch (Exception e) {
+            enabled = !enabled;
+            System.err.println("[OxyGen] Error toggling module " + name + ": " + e.getMessage());
+            return;
+        }
         if (mc.player != null) {
             mc.player.sendMessage(Text.literal((enabled ? "§a✔ " : "§c✘ ") + name + (enabled ? " ON" : " OFF")), true);
         }
@@ -29,5 +35,13 @@ public abstract class Module {
     public String getName() { return name; }
     public Category getCategory() { return category; }
     public boolean isEnabled() { return enabled; }
-    public void setEnabled(boolean e) { enabled = e; if (e) onEnable(); else onDisable(); }
+    public void setEnabled(boolean e) {
+        enabled = e;
+        try {
+            if (e) onEnable(); else onDisable();
+        } catch (Exception ex) {
+            enabled = !e;
+            System.err.println("[OxyGen] Error setting module " + name + " to " + e + ": " + ex.getMessage());
+        }
+    }
 }

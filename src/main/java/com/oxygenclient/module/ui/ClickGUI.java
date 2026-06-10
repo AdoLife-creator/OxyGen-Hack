@@ -29,6 +29,7 @@ public class ClickGUI extends Screen {
             ).dimensions(cx + i * 100, cy, 90, 20).build());
         }
 
+        if (OxygenClient.moduleManager == null) return;
         List<Module> mods = OxygenClient.moduleManager.getByCategory(cat);
         int y = cy + 30;
         for (Module m : mods) {

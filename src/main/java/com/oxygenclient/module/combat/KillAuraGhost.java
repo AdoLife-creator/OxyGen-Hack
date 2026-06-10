@@ -19,7 +19,7 @@ public class KillAuraGhost extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player == null || mc.world == null) return;
+        if (mc.player == null || mc.world == null || mc.interactionManager == null) return;
         if (System.currentTimeMillis() < delay) return;
         if (!DelayNormalizer.canSendPacket()) return;
         Box box = new Box(mc.player.getX()-4, mc.player.getY()-4, mc.player.getZ()-4, mc.player.getX()+4, mc.player.getY()+4, mc.player.getZ()+4);

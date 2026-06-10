@@ -37,5 +37,14 @@ public class ModuleManager {
     public List<Module> getByCategory(Category c) {
         return modules.stream().filter(m -> m.getCategory() == c).collect(Collectors.toList());
     }
-    public void onTick() { modules.stream().filter(Module::isEnabled).forEach(Module::onTick); }
+    public void onTick() {
+        for (Module m : modules) {
+            if (!m.isEnabled()) continue;
+            try {
+                m.onTick();
+            } catch (Exception e) {
+                System.err.println("[OxyGen] Error in module " + m.getName() + ".onTick(): " + e.getMessage());
+            }
+        }
+    }
 }
