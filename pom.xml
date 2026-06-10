@@ -4,143 +4,76 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.oxygenmod</groupId>
-    <artifactId>oxygen-mod</artifactId>
-    <version>1.0.0</version>
+    <groupId>com.oxygenclient</groupId>
+    <artifactId>oxygen-client</artifactId>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
-    <name>OxyGen Mod</name>
-    <description>Right Shift = Maden Menüsü | R = Arkadan Mob Vurma | Gelişmiş Maden Sistemi</description>
-    <url>https://github.com/yourname/oxygen-mod</url>
-
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>https://opensource.org/licenses/MIT</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>OxyGen Team</name>
-        </developer>
-    </developers>
+    <name>OxyGen Hack Client</name>
+    <description>Ultimate Minecraft Hack Client with KillAura, XRay, ESP, Fly, Speed and more!</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        
-        <!-- Minecraft & Fabric versions -->
         <minecraft.version>1.21.4</minecraft.version>
         <fabric.version>0.102.0+1.21.4</fabric.version>
         <fabric.loader.version>0.16.7</fabric.loader.version>
         <yarn.mappings>1.21.4+build.1</yarn.mappings>
-        
-        <!-- Plugin versions -->
-        <fabric.loom.version>1.7.4</fabric.loom.version>
-        <maven.shade.version>3.5.1</maven.shade.version>
     </properties>
 
     <repositories>
-        <!-- Fabric Maven -->
         <repository>
             <id>fabric-maven</id>
             <url>https://maven.fabricmc.net/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
-        
-        <!-- Maven Central -->
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-    </properties>
+    </repositories>
 
     <dependencies>
-        <!-- Fabric Loader -->
         <dependency>
             <groupId>net.fabricmc</groupId>
             <artifactId>fabric-loader</artifactId>
             <version>${fabric.loader.version}</version>
-            <scope>runtime</scope>
         </dependency>
-
-        <!-- Fabric API -->
         <dependency>
             <groupId>net.fabricmc.fabric-api</groupId>
             <artifactId>fabric-api</artifactId>
             <version>${fabric.version}</version>
-            <scope>provided</scope>
         </dependency>
-
-        <!-- Minecraft (provided by Fabric) -->
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>minecraft</artifactId>
             <version>${minecraft.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Yarn Mappings -->
         <dependency>
             <groupId>net.fabricmc</groupId>
             <artifactId>yarn</artifactId>
             <version>${yarn.mappings}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Mixin -->
         <dependency>
             <groupId>net.fabricmc</groupId>
             <artifactId>sponge-mixin</artifactId>
             <version>0.12.5+mixin.0.8.5</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- GSON for Config -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
-
-        <!-- SLF4J for Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.9</version>
-        </dependency>
-
-        <!-- JUnit for Testing -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
-        
+        <finalName>OxygenClient-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
             </resource>
         </resources>
-
         <plugins>
-            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -148,80 +81,20 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <encoding>UTF-8</encoding>
                     <release>21</release>
                 </configuration>
             </plugin>
-
-            <!-- Maven Shade Plugin - Paketleme için -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven.shade.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <artifactSet>
-                                <includes>
-                                    <include>com.google.code.gson:gson</include>
-                                </includes>
-                            </artifactSet>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.oxygenmod.OxygenMod</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Maven Jar Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
                     <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                        </manifest>
                         <manifestEntries>
-                            <Mod-Side>both</Mod-Side>
-                            <Fabric-Loom-Remap>true</Fabric-Loom-Remap>
+                            <Mod-Side>client</Mod-Side>
                         </manifestEntries>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <!-- Clean Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.3.2</version>
-            </plugin>
-
-            <!-- Resources Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <!-- Surefire Plugin for Tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.2</version>
             </plugin>
         </plugins>
     </build>
